@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Media</title>
+    <style>
+        .progress-container {
+            width: 100%;
+            background-color: #f3f3f3;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            display: none;
+        }
+        .progress-bar {
+            height: 30px;
+            background-color: #4caf50;
+            text-align: center;
+            color: white;
+            width: 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Upload Media</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="fileInput" name="media" required><br><br>
+        <input type="text" name="username" placeholder="Enter your username" required><br><br>
+        <input type="text" name="location" placeholder="Enter your location" required><br><br>
+        <button type="submit">Upload</button>
+    </form>
+
+    <div class="progress-container" id="progressContainer">
+        <div class="progress-bar" id="progressBar">0%</div>
+    </div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+
+        form.onsubmit = function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/media/upload', true);
+
+            // Show progress container during upload
+            progressContainer.style.display = 'block';
+
+            xhr.upload.onprogress = function(event) {
+                if (event.lengthComputable) {
+                    const percent = (event.loaded / event.total) * 100;
+                    progressBar.style.width = percent + '%';
+                    progressBar.innerText = Math.round(percent) + '%';
+                }
+            };
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Upload successful
+                    alert('Upload successful!');
+                    window.location.href = '/dashboard';
+                } else {
+                    alert('Upload failed: ' + xhr.responseText);
+                }
+                progressContainer.style.display = 'none'; // Hide progress bar
+            };
+
+            xhr.onerror = function() {
+                alert('Error during file upload');
+                progressContainer.style.display = 'none'; // Hide progress bar
+            };
+
+            xhr.send(formData);
+        };
+    </script>
+</body>
+</html>

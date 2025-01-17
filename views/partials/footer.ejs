@@ -1,0 +1,26 @@
+<footer class="bg-gray-800 text-gray-200 py-8">
+    <div class="container mx-auto px-6">
+        <!-- Footer Content -->
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <!-- Copyright Text -->
+            <p class="text-sm text-center md:text-left mb-4 md:mb-0">
+                &copy; <%= new Date().getFullYear() %> <strong class="text-white">PingVerse</strong>. All Rights Reserved.
+            </p>
+
+            <!-- Navigation Links -->
+            <% if (links && links.length > 0) { %>
+                <nav>
+                    <ul class="flex flex-wrap justify-center md:justify-end space-x-6">
+                        <% links.forEach(link => { %>
+                            <li>
+                                <a href="<%= link.url %>" class="text-gray-300 hover:text-white text-sm font-medium transition duration-300">
+                                    <%= link.label %>
+                                </a>
+                            </li>
+                        <% }); %>
+                    </ul>
+                </nav>
+            <% } %>
+        </div>
+    </div>
+</footer>

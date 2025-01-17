@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room | PingVerse</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-100 relative bg-fixed bg-cover" 
+      style="background-image: url('https://storage.googleapis.com/a1aa/image/2b5gfJgyUhSqQy1TkbxaMVXfX5vNIn6e5SE95gaT7EZtgwCoA.jpg'); background-size: cover; background-position: center;">
+    
+    <!-- Background Overlay -->
+    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+    
+    <!-- Header -->
+    <header class="bg-gray-900 text-white py-4 shadow-md relative z-10">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <h1 class="text-lg font-bold tracking-wide">
+                Welcome, <%= user %>
+            </h1>
+            <nav class="flex space-x-4">
+                <a href="/" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105">
+                    <i class="fas fa-home mr-2"></i>
+                    <span class="hidden sm:inline">Home</span>
+                </a>
+                <a href="/logout" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    <span class="hidden sm:inline">Logout</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 relative z-10">
+        <!-- Page Title -->
+        <h2 class="text-2xl font-bold mb-6 text-white text-center">Chat Room</h2>
+        
+        <!-- Chat Box -->
+        <div class="bg-white bg-opacity-80 rounded-lg shadow-md p-6 mb-6 max-w-4xl mx-auto">
+            <!-- Welcome Message -->
+            <h1 class="text-xl font-bold mb-4 text-center">
+                Welcome to the Chat Room, <%= user %>
+            </h1>
+            
+            <!-- Messages -->
+<div id="chat-box" class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4 h-96 overflow-y-auto">
+    <ul id="messages" class="space-y-4">
+        <% messages.forEach(message => { %>
+            <li class="flex items-start space-x-3 <% if (message.username === user) { %> justify-end <% } %>">
+                <% if (message.username !== user) { %>
+                    <!-- Profile Avatar -->
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                            <%= message.username.charAt(0).toUpperCase() %>
+                        </div>
+                    </div>
+                <% } %>
+                <!-- Message Bubble -->
+                <div>
+                    <p class="text-xs font-bold text-gray-700 <% if (message.username === user) { %> text-right <% } %>">
+                        <%= message.username %>
+                    </p>
+                    <div class="<% if (message.username === user) { %> bg-green-100 <% } else { %> bg-gray-100 <% } %> p-3 rounded-lg max-w-xs shadow-md">
+                        <p class="text-sm text-gray-900">
+                            <%= message.message %>
+                        </p>
+                        <em><%= message.timestamp %></em>
+                    </div>
+                </div>
+            </li>
+        <% }); %>
+    </ul>
+</div>
+            
+            <!-- Message Form -->
+            <form id="chat-form" class="flex w-full">
+                <input 
+                    id="message" 
+                    autocomplete="off" 
+                    placeholder="Type a message..." 
+                    class="flex-grow p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" 
+                />
+                <button 
+                    class="bg-blue-500 text-white p-2 rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm flex-shrink-0 w-12 sm:w-auto sm:px-4 transition-all">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+  <div class="fixed bottom-0 left-0 right-0 bg-gray-800 shadow-lg z-50">
+    <div class="flex justify-around py-2">
+      <a class="flex flex-col items-center text-gray-300 hover:text-blue-400" href="/">
+        <i class="fas fa-home text-xl"></i>
+        <span class="text-xs">Feed</span>
+      </a>
+      <a class="flex flex-col items-center text-gray-300 hover:text-blue-400" href="/discussion">
+        <i class="fas fa-comments text-xl"></i>
+        <span class="text-xs">Discussion</span>
+      </a>
+      <a class="flex flex-col items-center text-gray-300 hover:text-blue-400" href="/profile">
+        <i class="fas fa-user text-xl"></i>
+        <span class="text-xs">Profile</span>
+      </a>
+    </div>
+  </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Send chat message
+        const form = document.getElementById('chat-form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = document.getElementById('message').value;
+            const username = '<%= user %>'; // Pass username from server-side
+            socket.emit('chatMessage', { username, content: message });
+            document.getElementById('message').value = '';
+        });
+
+        // Receive chat message
+        const messages = document.getElementById('messages');
+        socket.on('chatMessage', (msg) => {
+            const li = document.createElement('li');
+            li.classList.add('p-2', 'bg-white', 'rounded', 'shadow');
+            li.innerHTML = `
+                <strong class="text-blue-600">${msg.username}:</strong> 
+                ${msg.content} 
+                <em class="text-gray-500 text-sm block">(${new Date(msg.timestamp).toLocaleTimeString()})</em>
+            `;
+            messages.appendChild(li);
+            messages.scrollTop = messages.scrollHeight; // Auto-scroll to the latest message
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Dashboard | PingVerse
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+   <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+ </head>
+ <body class="min-h-screen bg-gray-100 relative bg-fixed bg-cover"style="background-image: url('https://image-static.collegedunia.com/public/college_data/images/campusimage/1553251231IMG_3567.JPG'); background-size: cover; background-position: center;">
+    <header class="bg-gray-900 text-white py-6 shadow-md">
+   <div class="container mx-auto px-4 flex justify-between items-center">
+    <h1 class="text-lg font-bold">Welcome, <%= user.username %>!</h1>
+    <nav class="flex space-x-4">
+     <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105" id="uploadMediaBtn">
+      <i class="fas fa-upload mr-2">
+      </i>
+      <span class="hidden sm:inline">
+       Upload Media
+      </span>
+     </button>
+     <a class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105" href="/chat">
+      <i class="fas fa-comments mr-2">
+      </i>
+      <span class="hidden sm:inline">
+       Chat Room
+      </span>
+     </a>
+     <div class="relative">
+      <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105" id="profileManagementBtn">
+       <i class="fas fa-user mr-2">
+       </i>
+       <span class="hidden sm:inline">
+        Profile
+       </span>
+      </button>
+      <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-30 hidden" id="profileDropdown">
+       <a class="block px-4 py-2 text-gray-800 hover:bg-gray-200" href="/manageProfile">
+        Manage Profile
+       </a>
+       <a class="block px-4 py-2 text-gray-800 hover:bg-gray-200" href="/logout">
+        Logout
+       </a>
+      </div>
+     </div>
+    </nav>
+   </div>
+  </header>
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-8 relative z-10">
+    <!-- Weather Section -->
+   <section class="bg-white bg-opacity-80 rounded-lg shadow-md p-6 mb-6 max-w-4xl mx-auto">
+    <h3 class="text-lg font-semibold mb-4">
+     Weather Updates
+    </h3>
+    <div class="text-gray-700" id="weatherContent">
+     Fetching weather updates...
+    </div>
+   </section>
+   <!-- NumbersAPI Fun Fact Section -->
+   <section class="bg-white bg-opacity-80 rounded-lg shadow-md p-6 mb-6 max-w-4xl mx-auto">
+    <div class="text-center" id="numbers-api-data">
+     <h3 class="text-lg font-semibold mb-4" style="font-family: 'Roboto', sans-serif;">
+      Numbers Fun Fact
+     </h3>
+     <p class="text-lg font-bold" id="fun-fact">
+      Loading...
+     </p>
+    </div>
+   </section>
+   <!-- Random Dog Image Section -->
+   <section class="bg-white bg-opacity-80 rounded-lg shadow-md p-6 mb-6 max-w-4xl mx-auto">
+    <div class="text-xl font-bold mb-4" id="dogHeading">
+    </div>
+    <div class="flex justify-center items-center" id="dogImageContainer">
+     <p class="text-gray-700">
+      Fetching a random dog image...
+     </p>
+    </div>
+   </section>
+   <script>
+    // Fetch and display a random trivia fact from NumbersAPI
+    async function fetchNumbersApiData() {
+        try {
+            const response = await fetch('http://numbersapi.com/random/trivia');
+            if (!response.ok) {
+                throw new Error('Failed to fetch data from NumbersAPI');
+            }
+            const data = await response.text();
+            document.getElementById('fun-fact').textContent = data;
+        } catch (error) {
+            document.getElementById('fun-fact').textContent = 'Could not load fun fact. Please try again later.';
+            console.error(error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchNumbersApiData);
+</script>
+
+<style>
+    #numbers-api-data {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    #numbers-api-data h3 {
+        font-size: 1.25em;
+        margin-bottom: 10px;
+    }
+
+    #numbers-api-data p {
+        font-size: 1em;
+        color: #555;
+    }
+</style>
+ <!-- Upload Popup -->
+   <section class="bg-white bg-opacity-80 rounded-lg shadow-md p-6 mb-6">
+    <h3 class="text-lg font-semibold mb-4">Uploaded Media</h3>
+    <div id="mediaGallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <% if (mediaItems && mediaItems.length > 0) { %>
+            <% mediaItems.forEach((item) => { %>
+                <div class="border rounded-lg overflow-hidden shadow-md p-4 bg-gray-100 relative">
+                    <!-- Skeleton Loader -->
+                    <div class="skeleton-loader absolute inset-0 bg-gray-300 animate-pulse rounded-md"></div>
+
+                    <% if (item.file_path.match(/\.(jpg|jpeg|png|gif)$/i)) { %>
+                        <img 
+                            src="/<%= item.file_path %>" 
+                            alt="Media Upload" 
+                            class="w-full h-48 object-cover rounded-md mb-4 opacity-0" 
+                            onload="this.style.opacity='1'; this.previousElementSibling.style.display='none';">
+                    <% } else if (item.file_path.match(/\.(mp4|mkv|avi)$/i)) { %>
+                        <video 
+                            controls 
+                            class="w-full h-48 object-cover rounded-md mb-4 opacity-0" 
+                            onloadeddata="this.style.opacity='1'; this.previousElementSibling.style.display='none';">
+                            <source src="/<%= item.file_path %>" type="video/mp4">
+                            Your browser does not support video playback.
+                        </video>
+                    <% } %>
+                    
+                    <div class="content">
+                        <h4 class="font-bold text-sm">Uploaded by: <%= item.username %></h4>
+                        <p class="text-xs text-gray-600">Location: <%= item.location %></p>
+                        <p class="text-xs text-gray-600">Uploaded at: <%= new Date(item.uploaded_at).toLocaleString() %></p>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p class="text-gray-600 text-center">No media uploads nearby.</p>
+        <% } %>
+    </div>
+</section>
+  </main>
+
+  // Uploaded Media Gallery
+  <div class="fixed inset-0 flex justify-center items-center opacity-0 pointer-events-none z-50 transition-all duration-300 ease-in-out" id="uploadPopup">
+   <div class="bg-white bg-opacity-90 rounded-lg shadow-md p-6 w-11/12 sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 transform scale-95">
+    <h2 class="text-xl font-semibold mb-4 text-center">
+     Upload Photo or Video
+    </h2>
+    <form action="/media/upload" class="space-y-4" enctype="multipart/form-data" method="POST">
+        <input name="username" type="hidden" value="<%= user.username %>"/>
+     <div>
+      <label class="block text-sm font-medium text-gray-700" for="location">
+       Location
+      </label>
+      <input class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" id="location" name="location" placeholder="Fetching your location..." readonly="" required="" type="text"/>
+     </div>
+     <div>
+      <label class="block text-sm font-medium text-gray-700" for="media">
+       Upload File
+      </label>
+      <input accept="image/*,video/*" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" id="media" name="media" required="" type="file"/>
+     </div>
+     <button class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-full shadow-lg transform transition-transform hover:scale-105" type="submit">
+      <i class="fas fa-cloud-upload-alt mr-2">
+      </i>
+      Upload
+     </button>
+    </form>
+    <button class="absolute top-2 right-2 w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-105" id="closeUploadPopupBtn">
+     ×
+    </button>
+   </div>
+  </div>
+  <div class="fixed bottom-0 left-0 right-0 bg-gray-800 shadow-lg z-50">
+    <div class="flex justify-around py-2">
+      <a class="flex flex-col items-center text-gray-300 hover:text-blue-400" href="/">
+        <i class="fas fa-home text-xl"></i>
+        <span class="text-xs">Feed</span>
+      </a>
+      <a class="flex flex-col items-center text-gray-300 hover:text-blue-400" href="/discussion">
+        <i class="fas fa-comments text-xl"></i>
+        <span class="text-xs">Discussion</span>
+      </a>
+      <a class="flex flex-col items-center text-gray-300 hover:text-blue-400" href="/profile">
+        <i class="fas fa-user text-xl"></i>
+        <span class="text-xs">Profile</span>
+      </a>
+    </div>
+  </div>
+  
+  <script>
+   const uploadMediaBtn = document.getElementById("uploadMediaBtn");
+        const uploadPopup = document.getElementById("uploadPopup");
+        const closeUploadPopupBtn = document.getElementById("closeUploadPopupBtn");
+
+        const profileManagementBtn = document.getElementById("profileManagementBtn");
+        const profileDropdown = document.getElementById("profileDropdown");
+
+        uploadMediaBtn.addEventListener("click", () => {
+            uploadPopup.style.display = "flex";
+            setTimeout(() => {
+                uploadPopup.classList.remove("opacity-0", "scale-95", "pointer-events-none");
+                uploadPopup.classList.add("opacity-100", "scale-100");
+            }, 50);
+        });
+
+        closeUploadPopupBtn.addEventListener("click", () => {
+            uploadPopup.classList.remove("opacity-100", "scale-100");
+            uploadPopup.classList.add("opacity-0", "scale-95", "pointer-events-none");
+            setTimeout(() => uploadPopup.style.display = "none", 300);
+        });
+
+        profileManagementBtn.addEventListener("click", () => {
+            profileDropdown.classList.toggle("hidden");
+        });
+
+        uploadPopup.addEventListener("click", (e) => {
+            if (!e.target.closest(".bg-white")) closeUploadPopupBtn.click();
+        });
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(({ coords }) => {
+                document.getElementById("location").value = `Lat: ${coords.latitude}, Long: ${coords.longitude}`;
+            }, () => {
+                alert("Unable to retrieve location. Ensure location services are enabled.");
+                document.getElementById("location").placeholder = "Location not available";
+            });
+        } else {
+            alert("Geolocation is not supported by your browser.");
+            document.getElementById("location").placeholder = "Geolocation not supported";
+        }
+
+        const weatherContent = document.getElementById("weatherContent");
+        const weatherApiKey = "d492a9c5cc83fe84797ff4ef0bcc6f6f";
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(({ coords }) => {
+                const weatherApiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${coords.latitude}&lon=${coords.longitude}&appid=${weatherApiKey}&units=metric`;
+                fetch(weatherApiUrl)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.cod === 200) {
+                            let weatherIcon;
+                            switch (data.weather[0].main.toLowerCase()) {
+                                case 'clear':
+                                    weatherIcon = '☀️';
+                                    break;
+                                case 'clouds':
+                                    weatherIcon = '☁️';
+                                    break;
+                                case 'rain':
+                                    weatherIcon = '🌧️';
+                                    break;
+                                case 'snow':
+                                    weatherIcon = '❄️';
+                                    break;
+                                case 'thunderstorm':
+                                    weatherIcon = '⛈️';
+                                    break;
+                                case 'drizzle':
+                                    weatherIcon = '🌦️';
+                                    break;
+                                case 'mist':
+                                case 'fog':
+                                    weatherIcon = '🌫️';
+                                    break;
+                                default:
+                                    weatherIcon = '🌡️';
+                            }
+
+                            weatherContent.innerHTML = `
+                                <p><strong>Location:</strong> ${data.name}, ${data.sys.country}</p>
+                                <p><strong>Temperature:</strong> ${data.main.temp}°C (Feels like ${data.main.feels_like}°C)</p>
+                                <p><strong>Condition:</strong> ${weatherIcon} ${data.weather[0].description}</p>
+                                <p><strong>Humidity:</strong> ${data.main.humidity}%</p>
+                                <p><strong>Wind Speed:</strong> ${data.wind.speed} m/s</p>
+                            `;
+                        } else {
+                            weatherContent.innerHTML = "<p>Could not fetch weather data.</p>";
+                        }
+                    })
+                    .catch(() => weatherContent.innerHTML = "<p>Could not fetch weather data.</p>");
+            });
+        } else {
+            weatherContent.innerHTML = "<p>Geolocation not available.</p>";
+        }
+
+        const dogImageContainer = document.getElementById("dogImageContainer");
+        const dogHeading = document.getElementById("dogHeading");
+
+        const headings = [
+            "Paws and Relax: Latest Doggos in Action!",
+            "Barking News: Meet Our Furry Friends!",
+            "Tail-Wagging Tales: Canine Chronicles",
+            "Fetch the Fun: Dogs That Make Your Day!",
+            "Woof-Worthy Moments: Dogs Stealing the Show!",
+            "Pawprints and Smiles: The Dog Diaries",
+            "Fur-ever Friends: Highlighting Doggo Adventures!",
+            "Bark-a-lot: Latest Pups on Patrol!",
+            "Sniffing Out Joy: Dogs on the Go!",
+            "Canine Corner: Where Happiness Has a Tail!"
+        ];
+
+        // Pick a random heading for the dog image section
+        const randomHeading = headings[Math.floor(Math.random() * headings.length)];
+        dogHeading.innerText = randomHeading;
+
+        fetch("https://dog.ceo/api/breeds/image/random")
+            .then(response => response.json())
+            .then(data => {
+                dogImageContainer.innerHTML = `
+                    <img src="${data.message}" alt="Random Dog" class="w-full h-auto max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl object-cover rounded-md">
+                `;
+            })
+            .catch(() => dogImageContainer.innerHTML = "<p>Could not fetch dog image.</p>");
+  </script>
+ </body>
+</html>

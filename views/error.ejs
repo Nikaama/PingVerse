@@ -1,0 +1,24 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || "Error" %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+</head>
+<body class="min-h-screen bg-gray-100 relative">
+    <img alt="Background image depicting a diverse community gathering, with people interacting and engaging in various activities" class="absolute inset-0 w-full h-full object-cover" height="1080" src="https://storage.googleapis.com/a1aa/image/xAYyfTesef3Seiir15WONImHSBac9eA59cttvfhmc4xNz7kAKA.jpg" width="1920"/>
+    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    <div class="min-h-screen bg-gray-100 relative z-10">
+        <header class="bg-gradient-to-r from-red-500 via-red-600 to-red-700 text-white py-4">
+            <div class="container mx-auto px-4 flex justify-between items-center">
+                <h1 class="text-lg font-bold">Error</h1>
+            </div>
+        </header>
+        <main class="container mx-auto px-4 py-8">
+            <h2 class="text-2xl font-semibold text-red-500">Oops! Something went wrong.</h2>
+            <p class="text-gray-300 mt-4 bg-white bg-opacity-75 p-4 rounded"><%= error %></p>
+        </main>
+    </div>
+</body>
+</html>
