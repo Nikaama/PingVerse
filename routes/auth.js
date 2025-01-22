@@ -9,6 +9,9 @@ router.post('/signup', authController.signupUser);   // Ensure signupUser is def
 // Login route
 router.get('/login', authController.getLoginPage);   // Ensure getLoginPage is defined
 router.post('/login', authController.loginUser);     // Ensure loginUser is defined
+// POST route to handle OTP verification
+router.post('/verify-otp', authController.verifyOTP);
+
 
 // Logout route
 router.get('/logout', (req, res) => {

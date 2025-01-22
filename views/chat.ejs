@@ -1,89 +1,153 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Room | PingVerse</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Custom Styles -->
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
+        body { font-family: 'Roboto', sans-serif; }
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+        .date-divider {
+            position: relative;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .date-divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #e5e7eb;
+            z-index: 1;
+        }
+        .date-divider span {
+            background: #f9fafb;
+            padding: 0 10px;
+            color: #6b7280;
+            position: relative;
+            z-index: 2;
         }
     </style>
 </head>
-<body class="min-h-screen bg-gray-100 relative bg-fixed bg-cover" 
-      style="background-image: url('https://storage.googleapis.com/a1aa/image/2b5gfJgyUhSqQy1TkbxaMVXfX5vNIn6e5SE95gaT7EZtgwCoA.jpg'); background-size: cover; background-position: center;">
-    
-    <!-- Background Overlay -->
-    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
-    
+<body>
+    <!-- Video Background -->
+    <div class="HomeNew_backgroundGradient__Gqlhy BackgroundGradient_backgroundGradientWrapper__VhcUn">
+        <video class="video-background" autoplay loop muted playsinline
+               src="https://l4wlsi8vxy8hre4v.public.blob.vercel-storage.com/video/glass-animation-5-f0gPcjmKFIV3ot5MGOdNy2r4QHBoXt.mp4">
+        </video>
+        <div class="overlay"></div>
+    </div>
+
     <!-- Header -->
-    <header class="bg-gray-900 text-white py-4 shadow-md relative z-10">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <h1 class="text-lg font-bold tracking-wide">
-                Welcome, <%= user %>
-            </h1>
-            <nav class="flex space-x-4">
-                <a href="/" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105">
-                    <i class="fas fa-home mr-2"></i>
-                    <span class="hidden sm:inline">Home</span>
-                </a>
-                <a href="/logout" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105">
-                    <i class="fas fa-sign-out-alt mr-2"></i>
-                    <span class="hidden sm:inline">Logout</span>
-                </a>
-            </nav>
-        </div>
-    </header>
+<header class="bg-gray-900 text-white py-4 shadow-md fixed top-0 left-0 w-full z-10">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+        <h1 class="text-lg font-bold tracking-wide">
+            Welcome, <%= user %>
+        </h1>
+        <nav class="flex space-x-4">
+            <a class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105" href="/">
+             <i class="fas fa-home mr-2">
+             </i>
+             <span class="hidden sm:inline">
+              Home
+             </span>
+            </a>
+            <a class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105" href="/logout">
+             <i class="fas fa-sign-out-alt mr-2">
+             </i>
+             <span class="hidden sm:inline">
+              Logout
+             </span>
+            </a>
+           </nav>
+    </div>
+</header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8 relative z-10">
-        <!-- Page Title -->
-        <h2 class="text-2xl font-bold mb-6 text-white text-center">Chat Room</h2>
-        
+    <main class="container mx-auto px-4 py-8 relative z-10 h-screen flex flex-col mt-16">
+        <h2 class="text-2xl font-bold mb-6 text-white text-center mt-20">Chat Room</h2>
+
         <!-- Chat Box -->
-        <div class="bg-white bg-opacity-80 rounded-lg shadow-md p-6 mb-6 max-w-4xl mx-auto">
-            <!-- Welcome Message -->
-            <h1 class="text-xl font-bold mb-4 text-center">
-                Welcome to the Chat Room, <%= user %>
-            </h1>
-            
+        <div class="bg-white bg-opacity-50 rounded-lg shadow-md p-6 mb-6 flex-grow flex flex-col fixed inset-0 top-20 bottom-16 mx-4">
             <!-- Messages -->
-<div id="chat-box" class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4 h-96 overflow-y-auto">
-    <ul id="messages" class="space-y-4">
-        <% messages.forEach(message => { %>
-            <li class="flex items-start space-x-3 <% if (message.username === user) { %> justify-end <% } %>">
-                <% if (message.username !== user) { %>
-                    <!-- Profile Avatar -->
-                    <div class="flex-shrink-0">
-                        <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
-                            <%= message.username.charAt(0).toUpperCase() %>
+            <div id="chat-box" class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4 flex-grow overflow-y-auto">
+                <div id="messages" class="space-y-4">
+                    <% 
+                    let currentDate = null;
+                    messages.forEach(message => {
+                        const messageDate = new Date(message.timestamp);
+                        const today = new Date();
+                        const yesterday = new Date(today);
+                        yesterday.setDate(yesterday.getDate() - 1);
+                        
+                        let dateStr = messageDate.toISOString().split('T')[0];
+                        let displayDate = '';
+                        
+                        if (dateStr === today.toISOString().split('T')[0]) {
+                            displayDate = 'Today';
+                        } else if (dateStr === yesterday.toISOString().split('T')[0]) {
+                            displayDate = 'Yesterday';
+                        } else {
+                            displayDate = messageDate.toLocaleDateString('en-US', { 
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            });
+                        }
+                        
+                        if (currentDate !== dateStr) {
+                            currentDate = dateStr;
+                    %>
+                        <div class="date-divider">
+                            <span class="bg-gray-50 text-sm font-medium"><%= displayDate %></span>
                         </div>
-                    </div>
-                <% } %>
-                <!-- Message Bubble -->
-                <div>
-                    <p class="text-xs font-bold text-gray-700 <% if (message.username === user) { %> text-right <% } %>">
-                        <%= message.username %>
-                    </p>
-                    <div class="<% if (message.username === user) { %> bg-green-100 <% } else { %> bg-gray-100 <% } %> p-3 rounded-lg max-w-xs shadow-md">
-                        <p class="text-sm text-gray-900">
-                            <%= message.message %>
-                        </p>
-                        <em><%= message.timestamp %></em>
-                    </div>
+                    <% } %>
+                        <div class="flex items-start space-x-3 <%= message.username === user ? 'justify-end' : '' %>">
+                            <% if (message.username !== user) { %>
+                                <div class="flex-shrink-0">
+                                    <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                                        <%= message.username.charAt(0).toUpperCase() %>
+                                    </div>
+                                </div>
+                            <% } %>
+                            <div>
+                                <p class="text-xs font-bold text-gray-700 <%= message.username === user ? 'text-right' : '' %>">
+                                    <%= message.username %>
+                                </p>
+                                <div class="<%= message.username === user ? 'bg-green-100' : 'bg-gray-100' %> p-3 rounded-lg max-w-xs shadow-md">
+                                    <p class="text-sm text-gray-900"><%= message.message %></p>
+                                    <span class="text-xs text-gray-500">
+                                        <%= new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
                 </div>
-            </li>
-        <% }); %>
-    </ul>
-</div>
-            
+            </div>
+
             <!-- Message Form -->
             <form id="chat-form" class="flex w-full">
                 <input 
@@ -101,50 +165,180 @@
     </main>
 
     <!-- Bottom Navigation -->
-  <div class="fixed bottom-0 left-0 right-0 bg-gray-800 shadow-lg z-50">
-    <div class="flex justify-around py-2">
-      <a class="flex flex-col items-center text-gray-300 hover:text-blue-400" href="/">
-        <i class="fas fa-home text-xl"></i>
-        <span class="text-xs">Feed</span>
-      </a>
-      <a class="flex flex-col items-center text-gray-300 hover:text-blue-400" href="/discussion">
-        <i class="fas fa-comments text-xl"></i>
-        <span class="text-xs">Discussion</span>
-      </a>
-      <a class="flex flex-col items-center text-gray-300 hover:text-blue-400" href="/profile">
-        <i class="fas fa-user text-xl"></i>
-        <span class="text-xs">Profile</span>
-      </a>
+    <div class="fixed bottom-0 left-0 right-0 bg-gray-800 shadow-lg z-50">
+        <div class="flex justify-around py-2">
+            <a class="flex flex-col items-center text-gray-300 hover:text-blue-400" href="/">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-xs">Feed</span>
+            </a>
+            <a class="flex flex-col items-center text-gray-300 hover:text-blue-400" href="/discussion">
+                <i class="fas fa-comments text-xl"></i>
+                <span class="text-xs">Discussion</span>
+            </a>
+            <a class="flex flex-col items-center text-gray-300 hover:text-blue-400" href="/profile">
+                <i class="fas fa-user text-xl"></i>
+                <span class="text-xs">Profile</span>
+            </a>
+        </div>
     </div>
-  </div>
 
     <!-- Scripts -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
+        const chatBox = document.getElementById('chat-box');
+        const messages = document.getElementById('messages');
+
+        function formatDate(date) {
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            if (date.toISOString().split('T')[0] === today.toISOString().split('T')[0]) {
+                return 'Today';
+            } else if (date.toISOString().split('T')[0] === yesterday.toISOString().split('T')[0]) {
+                return 'Yesterday';
+            }
+            return date.toLocaleDateString('en-US', { 
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        function addDateDivider(date) {
+            const divider = document.createElement('div');
+            divider.className = 'date-divider';
+            divider.innerHTML = `<span class="bg-gray-50 text-sm font-medium">${formatDate(date)}</span>`;
+            return divider;
+        }
 
         // Send chat message
         const form = document.getElementById('chat-form');
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const message = document.getElementById('message').value;
-            const username = '<%= user %>'; // Pass username from server-side
-            socket.emit('chatMessage', { username, content: message });
-            document.getElementById('message').value = '';
+            const messageInput = document.getElementById('message');
+            const message = messageInput.value.trim();
+            if (message) {
+                socket.emit('chatMessage', { 
+                    username: '<%= user %>', 
+                    content: message,
+                    timestamp: new Date()
+                });
+                messageInput.value = '';
+            }
         });
 
         // Receive chat message
-        const messages = document.getElementById('messages');
         socket.on('chatMessage', (msg) => {
-            const li = document.createElement('li');
-            li.classList.add('p-2', 'bg-white', 'rounded', 'shadow');
-            li.innerHTML = `
-                <strong class="text-blue-600">${msg.username}:</strong> 
-                ${msg.content} 
-                <em class="text-gray-500 text-sm block">(${new Date(msg.timestamp).toLocaleTimeString()})</em>
+            const messageDate = new Date(msg.timestamp);
+            const lastMessage = messages.lastElementChild;
+            const lastDate = lastMessage ? lastMessage.getAttribute('data-date') : null;
+            const currentDate = messageDate.toISOString().split('T')[0];
+
+            if (currentDate !== lastDate) {
+                messages.appendChild(addDateDivider(messageDate));
+            }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.setAttribute('data-date', currentDate);
+            messageDiv.className = `flex items-start space-x-3 ${msg.username === '<%= user %>' ? 'justify-end' : ''}`;
+            
+            messageDiv.innerHTML = `
+                ${msg.username !== '<%= user %>' ? `
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                            ${msg.username.charAt(0).toUpperCase()}
+                        </div>
+                    </div>
+                ` : ''}
+                <div>
+                    <p class="text-xs font-bold text-gray-700 ${msg.username === '<%= user %>' ? 'text-right' : ''}">
+                        ${msg.username}
+                    </p>
+                    <div class="${msg.username === '<%= user %>' ? 'bg-green-100' : 'bg-gray-100'} p-3 rounded-lg max-w-xs shadow-md">
+                        <p class="text-sm text-gray-900">${msg.content}</p>
+                        <span class="text-xs text-gray-500">
+                            ${messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                    </div>
+                </div>
             `;
-            messages.appendChild(li);
-            messages.scrollTop = messages.scrollHeight; // Auto-scroll to the latest message
+            
+            messages.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+
+        // Scroll to bottom on page load
+        window.onload = () => {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        };
+
+        // Auto-refresh chat every 3 seconds
+        setInterval(() => {
+            socket.emit('refreshChat');
+        }, 3000);
+
+        // Handle chat refresh
+        socket.on('refreshChat', (newMessages) => {
+            messages.innerHTML = '';
+            let currentDate = null;
+            newMessages.forEach(message => {
+                const messageDate = new Date(message.timestamp);
+                const today = new Date();
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                
+                let dateStr = messageDate.toISOString().split('T')[0];
+                let displayDate = '';
+                
+                if (dateStr === today.toISOString().split('T')[0]) {
+                    displayDate = 'Today';
+                } else if (dateStr === yesterday.toISOString().split('T')[0]) {
+                    displayDate = 'Yesterday';
+                } else {
+                    displayDate = messageDate.toLocaleDateString('en-US', { 
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                }
+                
+                if (currentDate !== dateStr) {
+                    currentDate = dateStr;
+                    messages.appendChild(addDateDivider(messageDate));
+                }
+
+                const messageDiv = document.createElement('div');
+                messageDiv.setAttribute('data-date', currentDate);
+                messageDiv.className = `flex items-start space-x-3 ${message.username === '<%= user %>' ? 'justify-end' : ''}`;
+                
+                messageDiv.innerHTML = `
+                    ${message.username !== '<%= user %>' ? `
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                                ${message.username.charAt(0).toUpperCase()}
+                            </div>
+                        </div>
+                    ` : ''}
+                    <div>
+                        <p class="text-xs font-bold text-gray-700 ${message.username === '<%= user %>' ? 'text-right' : ''}">
+                            ${message.username}
+                        </p>
+                        <div class="${message.username === '<%= user %>' ? 'bg-green-100' : 'bg-gray-100'} p-3 rounded-lg max-w-xs shadow-md">
+                            <p class="text-sm text-gray-900">${message.content}</p>
+                            <span class="text-xs text-gray-500">
+                                ${messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                        </div>
+                    </div>
+                `;
+                
+                messages.appendChild(messageDiv);
+            });
+            chatBox.scrollTop = chatBox.scrollHeight;
         });
     </script>
 </body>

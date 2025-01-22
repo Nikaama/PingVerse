@@ -8,4 +8,7 @@ router.get('/', authController.getSignupPage);
 // Handle the Signup logic
 router.post('/', authController.signupUser);
 
+// Handle OTP verification
+router.post('/verify-otp', authController.verifyOTP);
+
 module.exports = router;

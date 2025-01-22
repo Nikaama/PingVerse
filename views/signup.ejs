@@ -1,48 +1,139 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Sign Up | PingVerse</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup | PingVerse</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+    </style>
 </head>
-<body class="min-h-screen bg-gray-100 relative">
-    <img alt="Background image depicting a diverse community gathering, with people interacting and engaging in various activities" class="absolute inset-0 w-full h-full object-cover" height="1080" src="https://storage.googleapis.com/a1aa/image/xAYyfTesef3Seiir15WONImHSBac9eA59cttvfhmc4xNz7kAKA.jpg" width="1920"/>
-    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+<body class="min-h-screen relative">
+    <div class="HomeNew_backgroundGradient__Gqlhy BackgroundGradient_backgroundGradientWrapper__VhcUn">
+        <video class="video-background" autoplay loop muted playsinline>
+            <source src="https://l4wlsi8vxy8hre4v.public.blob.vercel-storage.com/video/glass-animation-5-f0gPcjmKFIV3ot5MGOdNy2r4QHBoXt.mp4" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+    </div>
+
     <div class="flex items-center justify-center min-h-screen relative z-10">
         <div class="bg-white bg-opacity-50 p-8 rounded-lg shadow-lg w-full max-w-sm">
-            <h1 class="text-2xl font-bold mb-4 text-center">Sign Up</h1>
-            <form action="/signup" method="POST" class="space-y-4">
-                <div>
-                    <label for="username" class="block text-sm font-medium">Username:</label>
-                    <input type="text" name="username" id="username" required
-                           class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
+            <h2 class="text-2xl font-bold mb-6 text-center">Signup</h2>
+            
+            <% if (typeof message !== 'undefined' && message) { %>
+                <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
+                    <%= message %>
                 </div>
-                <div>
-                    <label for="email" class="block text-sm font-medium">Email:</label>
-                    <input type="email" name="email" id="email" required
-                           class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
-                </div>
-                <div>
-                    <label for="password" class="block text-sm font-medium">Password:</label>
-                    <div class="relative">
-                        <input type="password" name="password" id="password" required
-                               class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
-                        <button type="button" class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-600" onclick="togglePasswordVisibility()">
-                            <i class="fas fa-eye" id="eyeIcon"></i>
-                        </button>
+            <% } %>
+            
+            <% if (!otpSent) { %>
+                <!-- Initial Signup Form -->
+                <form action="/signup" method="POST" class="space-y-4">
+                    <div>
+                        <label for="username" class="block text-sm font-medium">Username</label>
+                        <input 
+                            type="text" 
+                            name="username" 
+                            id="username" 
+                            required 
+                            minlength="3"
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
+                        >
                     </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium">Email</label>
+                        <input 
+                            type="email" 
+                            name="email" 
+                            id="email" 
+                            required 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
+                        >
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium">Password</label>
+                        <div class="relative">
+                            <input 
+                                type="password" 
+                                name="password" 
+                                id="password" 
+                                required 
+                                minlength="6"
+                                placeholder="Password must be at least 6 characters long"
+                                class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
+                            >
+                            <button 
+                                type="button" 
+                                class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-600" 
+                                onclick="togglePasswordVisibility()"
+                            >
+                                <i class="fas fa-eye" id="eyeIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button 
+                        type="submit" 
+                        class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+                    >
+                        Sign Up
+                    </button>
+                </form>
+            <% } else { %>
+                <!-- OTP Verification Form -->
+                <div class="mb-4 text-center">
+                    <p class="text-sm text-gray-700">OTP has been sent to:</p>
+                    <p class="font-medium text-gray-900"><%= email %></p>
                 </div>
-                <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
-                    Sign Up
-                </button>
-                <% if (message) { %>
-                    <p class="text-red-500 text-sm mt-2"><%= message %></p>
-                <% } %>
-            </form>
-            <p class="mt-4 text-sm text-center">Already have an account? <a href="/login" class="text-blue-500 hover:underline">Login</a></p>
+                <form action="/verify-otp" method="POST" class="space-y-4">
+                    <div>
+                        <label for="otpEntered" class="block text-sm font-medium">Enter OTP</label>
+                        <input 
+                            type="text" 
+                            name="otpEntered" 
+                            id="otpEntered" 
+                            required 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
+                        >
+                    </div>
+                    <!-- Hidden fields to maintain state -->
+                    <input type="hidden" name="email" value="<%= email %>">
+                    <input type="hidden" name="username" value="<%= username %>">
+                    <input type="hidden" name="password" value="<%= password %>">
+                    <button 
+                        type="submit" 
+                        class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+                    >
+                        Verify OTP
+                    </button>
+                </form>
+            <% } %>
+
+            <p class="mt-4 text-center text-sm">
+                Already have an account? 
+                <a href="/login" class="text-blue-500 hover:underline">Login</a>
+            </p>
         </div>
     </div>
+
     <script>
         function togglePasswordVisibility() {
             const passwordField = document.getElementById('password');

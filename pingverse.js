@@ -11,10 +11,12 @@ require('dotenv').config();
 
 // **Import Custom Middleware and Routes**
 const serveStaticFiles = require('./middleware/staticFiles');
+const authController = require('./controllers/authController');  // Adjust the path if necessary
 const authRoutes = require('./routes/auth');
 const dashboardRoutes = require('./routes/dashboard');
 const mediaRoutes = require('./routes/media');
 const chatRoutes = require('./routes/chat');
+const discussionRoutes = require('./routes/discussion');
 const profileRoutes = require('./routes/profile'); // Corrected the variable name and import path
 const LoggedinUserUploads = require('./models/loggedinuser_uploads');
 
@@ -76,6 +78,7 @@ app.use('/', authRoutes); // Authentication routes
 app.use('/dashboard', dashboardRoutes); // Dashboard routes
 app.use('/media', mediaRoutes); // Media upload/download routes
 app.use('/chat', chatRoutes); // Chat routes
+app.use('/discussion', discussionRoutes);
 app.use('/profile', profileRoutes); // Profile routes - Corrected path and variable name
 app.use('/uploads', express.static('uploads'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -98,6 +101,9 @@ app.use((err, req, res, next) => {
     console.error('Error:', err.stack);
     res.status(500).render('error', { title: 'Internal Server Error', error: err.message });
 });
+
+// Define the /verify-otp route
+app.post('/verify-otp', authController.verifyOTP);
 
 // **Socket.IO Integration**
 io.on('connection', (socket) => {

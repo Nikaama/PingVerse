@@ -5,10 +5,35 @@
     <title>Login | PingVerse</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        /* Ensure the video covers the entire viewport */
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1; /* Ensure it sits behind other content */
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Add a dark overlay for better contrast */
+            z-index: 0;
+        }
+    </style>
 </head>
-<body class="min-h-screen bg-gray-100 relative">
-    <img alt="Background image depicting a diverse community gathering, with people interacting and engaging in various activities" class="absolute inset-0 w-full h-full object-cover" height="1080" src="https://storage.googleapis.com/a1aa/image/xAYyfTesef3Seiir15WONImHSBac9eA59cttvfhmc4xNz7kAKA.jpg" width="1920"/>
-    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+<body class="min-h-screen relative">
+    <div class="HomeNew_backgroundGradient__Gqlhy BackgroundGradient_backgroundGradientWrapper__VhcUn">
+        <video class="video-background" autoplay loop muted playsinline
+               src="https://l4wlsi8vxy8hre4v.public.blob.vercel-storage.com/video/glass-animation-5-f0gPcjmKFIV3ot5MGOdNy2r4QHBoXt.mp4">
+        </video>
+        <div class="overlay"></div>
+    </div>
     <div class="flex items-center justify-center min-h-screen relative z-10">
         <div class="bg-white bg-opacity-50 p-8 rounded-lg shadow-lg w-full max-w-sm">
             <h1 class="text-2xl font-bold mb-4 text-center">Login</h1>
