@@ -2,6 +2,9 @@
  <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>
    Dashboard | PingVerse
   </title>
@@ -44,43 +47,28 @@
 </div>
 
 <header class="bg-gray-900 text-white py-6 shadow-md">
-   <div class="container mx-auto px-4 flex justify-between items-center">
-    <h1 class="text-lg font-bold">Welcome, <%= user.username %></h1>
-    <nav class="flex space-x-4">
-     <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105" id="uploadMediaBtn">
-      <i class="fas fa-upload mr-2">
-      </i>
-      <span class="hidden sm:inline">
-       Upload Media
-      </span>
-     </button>
-     <a class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105" href="/chat">
-      <i class="fas fa-comments mr-2">
-      </i>
-      <span class="hidden sm:inline">
-       Chat Room
-      </span>
-     </a>
-     <div class="relative">
-      <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105" id="profileManagementBtn">
-       <i class="fas fa-user mr-2">
-       </i>
-       <span class="hidden sm:inline">
-        Profile
-       </span>
-      </button>
-      <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-30 hidden" id="profileDropdown">
-       <a class="block px-4 py-2 text-gray-800 hover:bg-gray-200" href="/manageProfile">
-        Manage Profile
-       </a>
-       <a class="block px-4 py-2 text-gray-800 hover:bg-gray-200" href="/logout">
-        Logout
-       </a>
-      </div>
-     </div>
-    </nav>
-   </div>
-  </header>
+    <div class="container mx-auto px-4 flex justify-between items-center">
+       <h1 class="text-lg font-bold">Welcome, <%= user.username %></h1>
+       <nav class="flex space-x-4">
+          <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105" id="uploadMediaBtn">
+             <i class="fas fa-upload mr-2"></i>
+             <span class="hidden sm:inline">Upload Media</span>
+          </button>
+          <a class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105" href="/chat">
+             <i class="fas fa-comments mr-2"></i>
+             <span class="hidden sm:inline">Chat Room</span>
+          </a>
+          <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105" id="profileManagementBtn">
+             <i class="fas fa-user mr-2"></i>
+             <span class="hidden sm:inline">Profile</span>
+          </button>
+          <a class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center transition-transform transform hover:scale-105" href="/logout">
+             <i class="fas fa-sign-out-alt mr-2"></i>
+             <span class="hidden sm:inline">Logout</span>
+          </a>
+       </nav>
+    </div>
+ </header>
   <!-- Main Content -->
   <main class="container mx-auto px-4 py-8 relative z-10">
     <!-- Weather Section -->

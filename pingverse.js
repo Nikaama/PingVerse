@@ -82,6 +82,7 @@ app.use('/discussion', discussionRoutes);
 app.use('/profile', profileRoutes); // Profile routes - Corrected path and variable name
 app.use('/uploads', express.static('uploads'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.static("public"));
 
 // **Root Route**
 app.get('/', (req, res) => {
